@@ -3,14 +3,25 @@ export async function songFromRadio(radio) {
     return undefined
   }
 
+  // Prefer explicit imageUrl field if provided (supports local public path or external link)
   let cover = 'internet-radio-icon.svg'
-  try {
-    const url = new URL(radio.homePageUrl ?? radio.streamUrl)
-    url.pathname = '/favicon.ico'
-    await resourceExists(url)
-    cover = url.toString()
-  } catch {
-    // ignore
+  if (radio.imageUrl) {
+    try {
+      const url = new URL(radio.imageUrl, window.location.origin)
+      await resourceExists(url)
+      cover = url.toString()
+    } catch {
+      // ignore and fallback to favicon behavior below
+    }
+  } else {
+    try {
+      const url = new URL(radio.homePageUrl ?? radio.streamUrl)
+      url.pathname = '/favicon.ico'
+      await resourceExists(url)
+      cover = url.toString()
+    } catch {
+      // ignore
+    }
   }
 
   return {

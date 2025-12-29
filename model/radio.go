@@ -9,6 +9,10 @@ type Radio struct {
 	HomePageUrl string    `structs:"home_page_url" json:"homePageUrl"`
 	CreatedAt   time.Time `structs:"created_at"    json:"createdAt"`
 	UpdatedAt   time.Time `structs:"updated_at"    json:"updatedAt"`
+
+	// New optional fields:
+	ImageUrl    string    `structs:"image_url"     json:"imageUrl,omitempty"`    // local public path (/radios/images/<file>) or external http(s) URL
+	Description string    `structs:"description"   json:"description,omitempty"` // optional description
 }
 
 type Radios []Radio

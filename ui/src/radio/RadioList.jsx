@@ -1,19 +1,20 @@
-import { makeStyles, useMediaQuery } from '@material-ui/core'
-import React, { cloneElement } from 'react'
+import React from 'react'
 import {
-  CreateButton,
   Datagrid,
   DateField,
   EditButton,
   Filter,
-  sanitizeListRestProps,
+  ImageField,
   SearchInput,
   SimpleList,
   TextField,
-  TopToolbar,
+  CreateButton,
   UrlField,
-  useTranslate,
+  useMediaQuery,
+  cloneElement,
+  sanitizeListRestProps,
 } from 'react-admin'
+import { makeStyles } from '@material-ui/core/styles'
 import { List } from '../common'
 import { ToggleFieldsMenu, useSelectedFields } from '../common'
 import { StreamField } from './StreamField'
@@ -51,25 +52,14 @@ const RadioListActions = ({
   ...rest
 }) => {
   const isNotSmall = useMediaQuery((theme) => theme.breakpoints.up('sm'))
-  const translate = useTranslate()
 
   return (
-    <TopToolbar className={className} {...sanitizeListRestProps(rest)}>
+    <div className={className} {...sanitizeListRestProps(rest)}>
       {isAdmin && (
-        <CreateButton basePath="/radio">
-          {translate('ra.action.create')}
-        </CreateButton>
+        <CreateButton basePath="/radio">Create</CreateButton>
       )}
-      {filters &&
-        cloneElement(filters, {
-          resource,
-          showFilter,
-          displayedFilters,
-          filterValues,
-          context: 'button',
-        })}
       {isNotSmall && <ToggleFieldsMenu resource="radio" />}
-    </TopToolbar>
+    </div>
   )
 }
 
@@ -118,22 +108,32 @@ const RadioList = ({ permissions, ...props }) => {
       {isXsmall ? (
         <SimpleList
           leftIcon={(r) => (
-            <StreamField
-              record={r}
-              source={'streamUrl'}
-              hideUrl
-              onClick={(e) => {
-                e.preventDefault()
-                e.stopPropagation()
-              }}
-            />
+            r.imageUrl ? (
+              <img
+                src={r.imageUrl}
+                alt={r.name}
+                style={{ width: 48, height: 48, objectFit: 'cover', borderRadius: 4 }}
+              />
+            ) : (
+              <StreamField
+                record={r}
+                source={'streamUrl'}
+                hideUrl
+                onClick={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                }}
+              />
+            )
           )}
           primaryText={(r) => r.name}
           secondaryText={(r) => r.homePageUrl}
         />
       ) : (
         <Datagrid rowClick={handleRowClick} classes={{ row: classes.row }}>
+          <ImageField source="imageUrl" title="name" />
           {columns}
+          <TextField source="description" />
           {isAdmin && <EditButton />}
         </Datagrid>
       )}

@@ -8,6 +8,7 @@ import {
 } from 'react-admin'
 import { urlValidate } from '../utils/validations'
 import { Title } from '../common'
+import { FileInput, ImageField } from 'react-admin'
 
 const RadioTitle = ({ record }) => {
   const translate = useTranslate()
@@ -34,6 +35,17 @@ const RadioEdit = (props) => {
           fullWidth
           validate={[urlValidate]}
         />
+        <TextInput source="description" fullWidth multiline />
+        <TextInput
+          type="url"
+          source="imageUrl"
+          label="Image URL (optional)"
+          fullWidth
+          validate={[urlValidate]}
+        />
+        <FileInput source="image" label="Upload image (optional)" accept="image/*">
+          <ImageField source="src" title="title" />
+        </FileInput>
         <DateField variant="body1" source="updatedAt" showTime />
         <DateField variant="body1" source="createdAt" showTime />
       </SimpleForm>
