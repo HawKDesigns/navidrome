@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { cloneElement } from 'react'
 import {
   Datagrid,
   DateField,
@@ -10,10 +10,9 @@ import {
   TextField,
   CreateButton,
   UrlField,
-  useMediaQuery,
-  cloneElement,
   sanitizeListRestProps,
 } from 'react-admin'
+import { useMediaQuery } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { List } from '../common'
 import { ToggleFieldsMenu, useSelectedFields } from '../common'
